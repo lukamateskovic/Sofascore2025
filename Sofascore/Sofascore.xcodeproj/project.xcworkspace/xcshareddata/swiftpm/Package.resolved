@@ -1,0 +1,24 @@
+{
+  "originHash" : "7b8238ff8593e556aaff0b28d0d2265086b0c8b4aee14032eafb1a1f66592656",
+  "pins" : [
+    {
+      "identity" : "academy",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sofascore/academy.git",
+      "state" : {
+        "branch" : "hw2",
+        "revision" : "dd8a8a0c3bf0cff1afbecb424c40ee1cf8afd2c0"
+      }
+    },
+    {
+      "identity" : "snapkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SnapKit/SnapKit.git",
+      "state" : {
+        "revision" : "2842e6e84e82eb9a8dac0100ca90d9444b0307f4",
+        "version" : "5.7.1"
+      }
+    }
+  ],
+  "version" : 3
+}
