@@ -4,38 +4,17 @@ import SofaAcademic
 
 final class MatchView: BaseView {
     
-    var startTimeLabel: UILabel!
-    var timeLabel: UILabel!
-    var line: UIImageView!
-    var homeTeamImageView: UIImageView!
-    var homeTeamLabel: UILabel!
-    var awayTeamImageView: UIImageView!
-    var awayTeamLabel: UILabel!
-    var scoreLabelHome: UILabel!
-    var scoreLabelAway: UILabel!
+    private var startTimeLabel: UILabel = .init()
+    private var timeLabel: UILabel = .init()
+    private var line: UIView = .init()
+    private var homeTeamImageView: UIImageView = .init()
+    private var homeTeamLabel: UILabel = .init()
+    private var awayTeamImageView: UIImageView = .init()
+    private var awayTeamLabel: UILabel = .init()
+    private var homeScoreLabel: UILabel = .init()
+    private var awayScoreLabel: UILabel = .init()
     
     override func addViews() {
-        startTimeLabel = UILabel()
-        timeLabel = UILabel()
-        line = UIImageView()
-        homeTeamImageView = UIImageView()
-        homeTeamLabel = UILabel()
-        awayTeamImageView = UIImageView()
-        awayTeamLabel = UILabel()
-        scoreLabelHome = UILabel()
-        scoreLabelAway = UILabel()
-        
-        
-        startTimeLabel.translatesAutoresizingMaskIntoConstraints = false
-        timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        line.translatesAutoresizingMaskIntoConstraints = false
-        homeTeamImageView.translatesAutoresizingMaskIntoConstraints = false
-        homeTeamLabel.translatesAutoresizingMaskIntoConstraints = false
-        awayTeamImageView.translatesAutoresizingMaskIntoConstraints = false
-        awayTeamLabel.translatesAutoresizingMaskIntoConstraints = false
-        scoreLabelHome.translatesAutoresizingMaskIntoConstraints = false
-        scoreLabelAway.translatesAutoresizingMaskIntoConstraints = false
-        
         addSubview(startTimeLabel)
         addSubview(timeLabel)
         addSubview(line)
@@ -43,16 +22,16 @@ final class MatchView: BaseView {
         addSubview(homeTeamLabel)
         addSubview(awayTeamImageView)
         addSubview(awayTeamLabel)
-        addSubview(scoreLabelHome)
-        addSubview(scoreLabelAway)
+        addSubview(homeScoreLabel)
+        addSubview(awayScoreLabel)
     }
     
     override func styleViews() {
-        startTimeLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        startTimeLabel.font = .roboto(size: 12, weight: .medium)
         startTimeLabel.textColor = .gray
         startTimeLabel.textAlignment = .center
         
-        timeLabel.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        timeLabel.font = .roboto(size: 12, weight: .medium)
         timeLabel.textColor = .gray
         timeLabel.textAlignment = .center
         
@@ -61,20 +40,20 @@ final class MatchView: BaseView {
         
         homeTeamImageView.contentMode = .scaleAspectFit
         
-        homeTeamLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        homeTeamLabel.font = .roboto(size: 14, weight: .medium)
         
         
         awayTeamImageView.contentMode = .scaleAspectFit
         
-        awayTeamLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        awayTeamLabel.font = .roboto(size: 14, weight: .medium)
         
-        scoreLabelHome.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        scoreLabelHome.textColor = .black
-        scoreLabelHome.textAlignment = .center
+        homeScoreLabel.font = .roboto(size: 14, weight: .medium)
+        homeScoreLabel.textColor = .black
+        homeScoreLabel.textAlignment = .center
         
-        scoreLabelAway.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        scoreLabelAway.textColor = .black
-        scoreLabelAway.textAlignment = .center
+        awayScoreLabel.font = .roboto(size: 14, weight: .medium)
+        awayScoreLabel.textColor = .black
+        awayScoreLabel.textAlignment = .center
     }
     
     override func setupConstraints() {
@@ -89,14 +68,14 @@ final class MatchView: BaseView {
             $0.leading.equalToSuperview().inset(4)
             $0.top.equalTo(startTimeLabel.snp.bottom).offset(4)
             $0.width.equalTo(56)
-            $0.height.equalTo(16)
+            $0.bottom.equalToSuperview().inset(10)
         }
         
         line.snp.makeConstraints{
             $0.leading.equalTo(startTimeLabel.snp.trailing).offset(3)
             $0.top.equalToSuperview().inset(8)
             $0.width.equalTo(1)
-            $0.height.equalTo(40)
+            $0.top.bottom.equalToSuperview().inset(8)
         }
         
         
@@ -110,10 +89,10 @@ final class MatchView: BaseView {
         homeTeamLabel.snp.makeConstraints {
             $0.leading.equalTo(homeTeamImageView.snp.trailing).offset(8)
             $0.top.equalToSuperview().inset(10)
-            $0.width.equalTo(192)
-            $0.height.equalTo(16)
+            $0.trailing.lessThanOrEqualTo(homeScoreLabel.snp.leading).offset(-8)
         }
-        
+        homeTeamLabel.setContentHuggingPriority(.required, for: .horizontal)
+        homeTeamLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         awayTeamImageView.snp.makeConstraints {
             $0.leading.equalTo(line.snp.trailing).offset(16)
             $0.top.equalTo(homeTeamImageView.snp.bottom).offset(4)
@@ -124,11 +103,11 @@ final class MatchView: BaseView {
         awayTeamLabel.snp.makeConstraints {
             $0.leading.equalTo(awayTeamImageView.snp.trailing).offset(8)
             $0.top.equalTo(homeTeamLabel.snp.bottom).offset(4)
-            $0.width.equalTo(192)
-            $0.height.equalTo(16)
+            $0.trailing.lessThanOrEqualTo(awayScoreLabel.snp.leading).offset(-8)
         }
-        
-        scoreLabelHome.snp.makeConstraints {
+        awayTeamLabel.setContentHuggingPriority(.required, for: .horizontal)
+        awayTeamLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        homeScoreLabel.snp.makeConstraints {
             $0.leading.equalTo(homeTeamLabel.snp.trailing).offset(16)
             $0.trailing.equalToSuperview().inset(16)
             $0.top.equalToSuperview().inset(10)
@@ -136,16 +115,55 @@ final class MatchView: BaseView {
             $0.height.equalTo(16)
         }
         
-        scoreLabelAway.snp.makeConstraints {
+        awayScoreLabel.snp.makeConstraints {
             $0.leading.equalTo(awayTeamLabel.snp.trailing).offset(16)
             $0.trailing.equalToSuperview().inset(16)
-            $0.top.equalTo(scoreLabelHome.snp.bottom).offset(10)
+            $0.top.equalTo(homeScoreLabel.snp.bottom).offset(10)
             $0.width.equalTo(32)
             $0.height.equalTo(16)
         }
-        
     }
-    
-    
 }
 
+extension MatchView {
+
+    func setStartTimeLabel(_ text: String?) {
+        startTimeLabel.text = text
+    }
+    func setTimeLabel(_ text: String?) {
+        timeLabel.text = text
+    }
+    func setTimeLabelColor(_ color: UIColor) {
+            timeLabel.textColor = color
+    }
+    func setHomeTeamImage(_ image: UIImage?) {
+        homeTeamImageView.image = image
+    }
+    func setHomeTeamLabel(_ text: String?) {
+        homeTeamLabel.text = text
+    }
+    func setHomeTeamLabelColor(_ color: UIColor) {
+            homeTeamLabel.textColor = color
+    }
+    func setAwayTeamImage(_ image: UIImage?) {
+        awayTeamImageView.image = image
+    }
+    func setAwayTeamLabel(_ text: String?) {
+        awayTeamLabel.text = text
+    }
+    func setAwayTeamLabelColor(_ color: UIColor) {
+            awayTeamLabel.textColor = color
+    }
+    func setHomeScoreLabel(_ text: String?) {
+        homeScoreLabel.text = text
+    }
+    func setHomeScoreLabelColor(_ color: UIColor) {
+        homeScoreLabel.textColor = color
+    }
+    func setAwayScoreLabel(_ text: String?) {
+        awayScoreLabel.text = text
+    }
+    func setAwayScoreLabelColor(_ color: UIColor) {
+        awayScoreLabel.textColor = color
+    }
+}
