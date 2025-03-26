@@ -4,15 +4,15 @@ import SofaAcademic
 
 final class MatchView: BaseView {
     
-    private var startTimeLabel: UILabel = .init()
-    private var timeLabel: UILabel = .init()
-    private var line: UIView = .init()
-    private var homeTeamImageView: UIImageView = .init()
-    private var homeTeamLabel: UILabel = .init()
-    private var awayTeamImageView: UIImageView = .init()
-    private var awayTeamLabel: UILabel = .init()
-    private var homeScoreLabel: UILabel = .init()
-    private var awayScoreLabel: UILabel = .init()
+    private let startTimeLabel: UILabel = .init()
+    private let timeLabel: UILabel = .init()
+    private let line: UIView = .init()
+    private let homeTeamImageView: UIImageView = .init()
+    private let homeTeamLabel: UILabel = .init()
+    private let awayTeamImageView: UIImageView = .init()
+    private let awayTeamLabel: UILabel = .init()
+    private let homeScoreLabel: UILabel = .init()
+    private let awayScoreLabel: UILabel = .init()
     
     override func addViews() {
         addSubview(startTimeLabel)
@@ -108,7 +108,6 @@ final class MatchView: BaseView {
         awayTeamLabel.setContentHuggingPriority(.required, for: .horizontal)
         awayTeamLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         homeScoreLabel.snp.makeConstraints {
-            $0.leading.equalTo(homeTeamLabel.snp.trailing).offset(16)
             $0.trailing.equalToSuperview().inset(16)
             $0.top.equalToSuperview().inset(10)
             $0.width.equalTo(32)
@@ -116,7 +115,6 @@ final class MatchView: BaseView {
         }
         
         awayScoreLabel.snp.makeConstraints {
-            $0.leading.equalTo(awayTeamLabel.snp.trailing).offset(16)
             $0.trailing.equalToSuperview().inset(16)
             $0.top.equalTo(homeScoreLabel.snp.bottom).offset(10)
             $0.width.equalTo(32)

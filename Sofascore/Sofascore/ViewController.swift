@@ -29,17 +29,16 @@ class ViewController: UIViewController {
 
     private func setUpConstraints() {
         leagueView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(0)
-            $0.height.equalTo(56)
-            $0.leading.trailing.equalToSuperview().inset(0)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
         }
         
         var previousView: UIView = leagueView
         
         for matchView in matchViews {
             matchView.snp.makeConstraints {
-                $0.top.equalTo(previousView.snp.bottom).offset(0)
-                $0.leading.trailing.equalToSuperview().inset(0)
+                $0.top.equalTo(previousView.snp.bottom)
+                $0.leading.trailing.equalToSuperview()
                 $0.height.equalTo(56)
             }
             previousView = matchView
@@ -50,7 +49,6 @@ class ViewController: UIViewController {
         let league = dataSource.laLigaLeague()
         leagueView.setleagueLogoImage(UIImage(named: "LaLiga1"))
         leagueView.setCountryLabel(league.country?.name ?? "")
-        leagueView.setPointerImage()
         leagueView.setLeagueLabel(league.name)
     }
     
@@ -72,10 +70,14 @@ class ViewController: UIViewController {
             matchView.setAwayTeamLabel(event.awayTeam.name)
             matchView.setAwayTeamLabelColor(getTeamColor(for: event, isHomeTeam: false))
             
-            matchView.setHomeScoreLabel(event.homeScore != nil ? String(event.homeScore!) : "")
+            if let homeScore: Int = event.homeScore {
+                matchView.setHomeScoreLabel(String(homeScore))
+            }
             matchView.setHomeScoreLabelColor(event.homeScore != nil ? getScoreColor(for: event, isHomeTeam: true) : .black)
 
-            matchView.setAwayScoreLabel(event.awayScore != nil ? String(event.awayScore!) : "")
+            if let awayScore: Int = event.awayScore {
+                matchView.setAwayScoreLabel(String(awayScore))
+            }
             matchView.setAwayScoreLabelColor(event.awayScore != nil ? getScoreColor(for: event, isHomeTeam: false) : .black)
         }
     }

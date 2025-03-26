@@ -22,6 +22,7 @@ final class LeagueView: BaseView {
         countryLabel.font = .roboto(size: 14, weight: .bold)
         
         pointer.contentMode = .scaleAspectFit
+        pointer.image = UIImage(named: "pointer")
         
         leagueLabel.font = .roboto(size: 14, weight: .bold)
         leagueLabel.textColor = .gray
@@ -63,9 +64,6 @@ extension LeagueView {
     }
     func setCountryLabel(_ text: String?) {
         countryLabel.text = text
-    }
-    func setPointerImage() {
-        pointer.image = UIImage(named: "pointer")
     }
     func setLeagueLabel(_ text: String?) {
         leagueLabel.text = text
