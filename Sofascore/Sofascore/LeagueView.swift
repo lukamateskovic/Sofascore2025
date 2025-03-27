@@ -32,7 +32,7 @@ final class LeagueView: BaseView {
         logoImageView.snp.makeConstraints {
             $0.top.bottom.equalToSuperview().inset(12)
             $0.leading.equalToSuperview().inset(16)
-            $0.size.equalTo(32)
+            $0.width.equalTo(32)
         }
         countryLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
