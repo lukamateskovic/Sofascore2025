@@ -78,7 +78,6 @@ final class MatchView: BaseView {
             $0.top.bottom.equalToSuperview().inset(8)
         }
         
-        
         homeTeamImageView.snp.makeConstraints {
             $0.leading.equalTo(line.snp.trailing).offset(16)
             $0.top.equalToSuperview().inset(10)
