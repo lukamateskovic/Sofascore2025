@@ -6,6 +6,7 @@ class Button: BaseView {
     private var icon: UIImageView = .init()
     private var sports: UILabel = .init()
 
+    var onTap: (() -> Void)?
     
     override func addViews() {
         addSubview(icon)
@@ -35,8 +36,6 @@ class Button: BaseView {
             $0.leading.trailing.equalToSuperview().inset(8)
             $0.bottom.equalToSuperview().inset(4)
         }
-        sports.setContentHuggingPriority(.required, for: .horizontal)
-        sports.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
 }
 
@@ -46,5 +45,14 @@ extension Button{
     }
     func setSports(_ text: String?) {
         sports.text = text
+    }
+    
+    @objc private func handleTap() {
+        onTap?()
+    }
+    
+    func addTapGestureRecognizer() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        addGestureRecognizer(tapGestureRecognizer)
     }
 }

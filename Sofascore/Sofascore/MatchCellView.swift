@@ -2,7 +2,7 @@ import UIKit
 import SnapKit
 import SofaAcademic
 
-class MatchViewCell: UITableViewCell {
+class MatchViewCell: UITableViewCell, ReusableCell, CellConfigurable {
 
     private let matchView = MatchView()
 
@@ -26,102 +26,56 @@ class MatchViewCell: UITableViewCell {
             $0.edges.equalToSuperview()
         }
     }
-
-    private func formatStartTime(for event: Event) -> String {
-        let timestamp = event.startTimestamp
-        let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
-        return dateFormatter.string(from: date)
-    }
-
-    private func getTimeDescription(for event: Event) -> String {
-        switch event.status {
-            case .finished:
-                return "FT"
-            case .inProgress:
-                let currentDateTime = Date()
-                let date = Date(timeIntervalSince1970: TimeInterval(event.startTimestamp))
-                let minutesPassed = Int((currentDateTime.timeIntervalSince(date)) / 60)
-                return "\(minutesPassed)'"
-            default:
-                return "-"
-        }
-    }
-
-    private func getTimeColor(for event: Event) -> UIColor {
-        switch event.status {
-            case .inProgress:
-                return .systemRed
-            default:
-                return .gray
-        }
-    }
-
-    private func getScoreColor(for event: Event, isHomeTeam: Bool) -> UIColor {
-        switch event.status {
-            case .finished:
-                if isHomeTeam {
-                    if event.homeScore ?? 0 > event.awayScore ?? 0 {
-                        return .black
-                    } else {
-                        return .gray
-                    }
-                } else {
-                    if event.awayScore ?? 0 > event.homeScore ?? 0 {
-                        return .black
-                    } else {
-                        return .gray
-                    }
-                }
-            case .inProgress:
-                return .systemRed
-            default:
-                return .black
-        }
-    }
-
-    private func getTeamColor(for event: Event, isHomeTeam: Bool) -> UIColor {
-        switch event.status {
-            case .finished:
-                if isHomeTeam {
-                    if event.homeScore ?? 0 > event.awayScore ?? 0 {
-                        return .black
-                    } else {
-                        return .gray
-                    }
-                } else {
-                    if event.awayScore ?? 0 > event.homeScore ?? 0 {
-                        return .black
-                    } else {
-                        return .gray
-                    }
-                }
-            default:
-                return .black
-        }
-    }
 }
 
 extension MatchViewCell{
-    func configureCell(event: Event) {
-        matchView.setStartTimeLabel(formatStartTime(for: event))
-        matchView.setTimeLabel(getTimeDescription(for: event))
-        matchView.setTimeLabelColor(getTimeColor(for: event))
-        
-        matchView.setHomeTeamImage(UIImage(named: event.homeTeam.name.lowercased()))
-        matchView.setHomeTeamLabel(event.homeTeam.name)
-        matchView.setHomeTeamLabelColor(getTeamColor(for: event, isHomeTeam: true))
-        
-        matchView.setAwayTeamImage(UIImage(named: event.awayTeam.name.lowercased()))
-        matchView.setAwayTeamLabel(event.awayTeam.name)
-        matchView.setAwayTeamLabelColor(getTeamColor(for: event, isHomeTeam: false))
-        
-        matchView.setHomeScoreLabel(event.homeScore != nil ? String(event.homeScore!) : "")
-        matchView.setHomeScoreLabelColor(event.homeScore != nil ? getScoreColor(for: event, isHomeTeam: true) : .black)
+    
+    func configure(with model: Any) {
+        guard let event = model as? Event else {
+            fatalError("")
+        }
+        configureCell(event: event)
+    }
+    
+    private func configureCell(event: Event) {
 
-        matchView.setAwayScoreLabel(event.awayScore != nil ? String(event.awayScore!) : "")
-        matchView.setAwayScoreLabelColor(event.awayScore != nil ? getScoreColor(for: event, isHomeTeam: false) : .black)
+        matchView.setStartTimeLabel(EventHelper.formatStartTime(for: event))
+        matchView.setTimeLabel(EventHelper.getTimeDescription(for: event))
+        matchView.setTimeLabelColor(EventHelper.getTimeColor(for: event))
+            
+        configureTeamViews(event: event, isHomeTeam: true)
+        configureTeamViews(event: event, isHomeTeam: false)
+            
+        configureScores(event: event)
+    }
+    
+    private func configureTeamViews(event: Event, isHomeTeam: Bool) {
+        let team = isHomeTeam ? event.homeTeam : event.awayTeam
+        let color = EventHelper.getTeamColor(for: event, isHomeTeam: isHomeTeam)
+            
+        if isHomeTeam {
+            matchView.setHomeTeamImage(UIImage(named: team.name.lowercased()))
+            matchView.setHomeTeamLabel(team.name)
+            matchView.setHomeTeamLabelColor(color)
+        } else {
+            matchView.setAwayTeamImage(UIImage(named: team.name.lowercased()))
+            matchView.setAwayTeamLabel(team.name)
+            matchView.setAwayTeamLabelColor(color)
+        }
+    }
+    
+    private func configureScores(event: Event) {
+        let homeScore = event.homeScore != nil ? String(event.homeScore!) : ""
+        let awayScore = event.awayScore != nil ? String(event.awayScore!) : ""
+            
+        let homeColor = EventHelper.getScoreColor(for: event, isHomeTeam: true)
+        let awayColor = EventHelper.getScoreColor(for: event, isHomeTeam: false)
+            
+        matchView.setHomeScoreLabel(homeScore)
+        matchView.setHomeScoreLabelColor(homeColor)
+            
+        matchView.setAwayScoreLabel(awayScore)
+        matchView.setAwayScoreLabelColor(awayColor)
     }
 }
 

@@ -2,18 +2,22 @@ import UIKit
 import SnapKit
 import SofaAcademic
 
+struct LeagueSection {
+    let league: League
+    let events: [Event]
+}
+
 class FootballViewController: UIViewController {
     
     private let tableView = UITableView(frame: .zero, style: .plain)
     private let dataSource = Homework3DataSource()
-    private var laLigaEvents: [Event] = []
-    private var premierLeagueEvents: [Event] = []
+    private var sortedLeagues: [LeagueSection] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
         setupConstraints()
-        sortEventsByLeague()
+        filterEventsByLeague()
         if #available(iOS 15.0, *) {
             tableView.sectionHeaderTopPadding = 0
         }
@@ -23,8 +27,8 @@ class FootballViewController: UIViewController {
         view.addSubview(tableView)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(LeagueViewCell.self, forCellReuseIdentifier: "LeagueCell")
-        tableView.register(MatchViewCell.self, forCellReuseIdentifier: "MatchCell")
+        tableView.register(LeagueViewCell.self, forCellReuseIdentifier: LeagueViewCell.reuseIdentifier)
+        tableView.register(MatchViewCell.self, forCellReuseIdentifier: MatchViewCell.reuseIdentifier)
     }
     
     private func setupConstraints() {
@@ -33,27 +37,41 @@ class FootballViewController: UIViewController {
         }
     }
     
-    private func sortEventsByLeague() {
+    private func filterEventsByLeague() {
         let allEvents = dataSource.events()
-        laLigaEvents = allEvents.filter { $0.league?.name == "La Liga" }
-        premierLeagueEvents = allEvents.filter { $0.league?.name == "Premier League" }
+
+        let groupedEvents = Dictionary(grouping: allEvents) { event in
+            event.league?.id ?? 0
+        }
+
+        sortedLeagues = groupedEvents.compactMap { (leagueID, events) in
+            guard let league = events.first(where: { $0.league != nil })?.league else {
+                return nil
+            }
+            return LeagueSection(league: league, events: events)
+        }
+        .sorted { $0.league.id < $1.league.id }
     }
+
 }
 
 extension FootballViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return sortedLeagues.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            return section == 0 ? laLigaEvents.count : premierLeagueEvents.count
+        return sortedLeagues[section].events.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MatchCell", for: indexPath) as! MatchViewCell
-        let event = indexPath.section == 0 ? laLigaEvents[indexPath.row] : premierLeagueEvents[indexPath.row]
-        cell.configureCell(event: event)
+        let cell = tableView.dequeueReusableCell(withIdentifier: MatchViewCell.reuseIdentifier, for: indexPath) as! MatchViewCell
+        let event = sortedLeagues[indexPath.section].events[indexPath.row]
+        guard let configurableCell = cell as? CellConfigurable else {
+            fatalError("Ćelija tipa \(type(of: cell)) ne podržava CellConfigurable")
+        }
+        configurableCell.configure(with: event)
         return cell
     }
 
@@ -67,26 +85,17 @@ extension FootballViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = LeagueView()
         headerView.backgroundColor = .white
-
-        let events = dataSource.events()
-        let league: League?
-
-        if section == 0 {
-            league = events.first(where: { $0.league?.name == "La Liga" })?.league
-        } else {
-            league = events.first(where: { $0.league?.name == "Premier League" })?.league
-        }
-
-        guard let league = league else { return nil }
-
-        let leagueLogo = UIImage(named: league.name.lowercased())
-        headerView.setleagueLogoImage(leagueLogo)
-        headerView.setCountryLabel(league.country?.name ?? "")
+        let league = sortedLeagues[section].league
+        
         headerView.setLeagueLabel(league.name)
-
+        headerView.setCountryLabel(league.country?.name ?? "Nepoznata država")
+        
+        let imageName = league.name.lowercased()
+        headerView.setleagueLogoImage(UIImage(named: imageName))
+        
         return headerView
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 56
     }
