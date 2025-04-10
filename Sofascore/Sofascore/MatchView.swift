@@ -78,7 +78,6 @@ final class MatchView: BaseView {
             $0.top.bottom.equalToSuperview().inset(8)
         }
         
-        
         homeTeamImageView.snp.makeConstraints {
             $0.leading.equalTo(line.snp.trailing).offset(16)
             $0.top.equalToSuperview().inset(10)
@@ -132,7 +131,7 @@ extension MatchView {
         timeLabel.text = text
     }
     func setTimeLabelColor(_ color: UIColor) {
-            timeLabel.textColor = color
+        timeLabel.textColor = color
     }
     func setHomeTeamImage(_ image: UIImage?) {
         homeTeamImageView.image = image
@@ -141,7 +140,7 @@ extension MatchView {
         homeTeamLabel.text = text
     }
     func setHomeTeamLabelColor(_ color: UIColor) {
-            homeTeamLabel.textColor = color
+        homeTeamLabel.textColor = color
     }
     func setAwayTeamImage(_ image: UIImage?) {
         awayTeamImageView.image = image
@@ -150,7 +149,7 @@ extension MatchView {
         awayTeamLabel.text = text
     }
     func setAwayTeamLabelColor(_ color: UIColor) {
-            awayTeamLabel.textColor = color
+        awayTeamLabel.textColor = color
     }
     func setHomeScoreLabel(_ text: String?) {
         homeScoreLabel.text = text
