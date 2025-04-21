@@ -1,7 +1,12 @@
 import UIKit
 import SnapKit
 
-class AmericanFootballViewController: UIViewController {
+struct LeagueSection {
+   let league: League
+   let events: [Event]
+}
+
+class FootballViewController3: UIViewController {
     
     private let tableView = UITableView(frame: .zero, style: .plain)
     private var sortedLeagues: [LeagueSection] = []
@@ -35,7 +40,7 @@ class AmericanFootballViewController: UIViewController {
     }
     
     private func loadData() {
-        APIClient.getGames(sport: "am-football") { [weak self] events in
+        APIClient.getGames(sport: "football") { [weak self] events in
             DispatchQueue.main.async {
             self?.loadingIndicator.stopAnimating()
                     
@@ -69,7 +74,7 @@ class AmericanFootballViewController: UIViewController {
     }
 }
 
-extension AmericanFootballViewController: UITableViewDataSource, UITableViewDelegate {
+extension FootballViewController3: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int { sortedLeagues.count }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -119,4 +124,3 @@ extension AmericanFootballViewController: UITableViewDataSource, UITableViewDele
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { 56 }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { 56 }
 }
-

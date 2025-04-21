@@ -133,17 +133,23 @@ extension MatchView {
     func setTimeLabelColor(_ color: UIColor) {
         timeLabel.textColor = color
     }
-    func setHomeTeamImage(_ image: UIImage?) {
-        homeTeamImageView.image = image
+    func setHomeTeamImage(with url: URL?) {
+        homeTeamImageView.image = nil
+        if let url = url {
+            homeTeamImageView.load(url: url)
+        }
+    }
+    func setAwayTeamImage(with url: URL?) {
+        awayTeamImageView.image = nil
+        if let url = url {
+            awayTeamImageView.load(url: url)
+        }
     }
     func setHomeTeamLabel(_ text: String?) {
         homeTeamLabel.text = text
     }
     func setHomeTeamLabelColor(_ color: UIColor) {
         homeTeamLabel.textColor = color
-    }
-    func setAwayTeamImage(_ image: UIImage?) {
-        awayTeamImageView.image = image
     }
     func setAwayTeamLabel(_ text: String?) {
         awayTeamLabel.text = text

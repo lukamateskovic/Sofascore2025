@@ -2,11 +2,12 @@ import UIKit
 import SofaAcademic
 import SnapKit
 
-class NavigationViewController: UIViewController {
+class NavigationViewController2: UIViewController {
     
     private var stackView: UIStackView = .init()
     private var containerView: UIView = .init()
     private var indicator: UIView = .init()
+    private var headerView = HeaderView()
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,12 +16,23 @@ class NavigationViewController: UIViewController {
         setupConstraints()
         
         showInitialViewController()
+        setupNavigation()
+        
     }
     
     private func createViews() {
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         view.addSubview(stackView)
+        
+        view.addSubview(headerView)
+                
+        headerView.onSettingsTapped = { [weak self] in
+            let settingsVC = SettingsViewController()
+            let navVC = UINavigationController(rootViewController: settingsVC)
+            navVC.modalPresentationStyle = .fullScreen
+            self?.present(navVC, animated: true)
+        }
             
         let footballButton = makeButton(
                 title: "Football",
@@ -30,7 +42,7 @@ class NavigationViewController: UIViewController {
                     self?.moveIndicator(to: button)
                 },
                 action: { [weak self] in
-                    self?.showViewController(FootballViewController())
+                    self?.showViewController(FootballViewController3())
                 }
             )
             
@@ -68,16 +80,33 @@ class NavigationViewController: UIViewController {
         indicator.backgroundColor = .white
         indicator.layer.cornerRadius = 2
         footballButton.addSubview(indicator)
+        
+    }
+    
+    private func setupNavigation() {
+        title = "Main"
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .systemBlue
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
     }
     
     private func showInitialViewController() {
-        let initialVC = FootballViewController() 
+        let initialVC = FootballViewController3()
         showViewController(initialVC)
     }
     
     private func setupConstraints() {
+        headerView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(44)
+        }
+        
         stackView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
+            $0.top.equalTo(headerView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
         }
         
@@ -137,3 +166,5 @@ class NavigationViewController: UIViewController {
         }
     }
 }
+
+
