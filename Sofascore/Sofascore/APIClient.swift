@@ -1,11 +1,11 @@
-import Foundation
+
 import Foundation
 import Network
 
 enum APIClient {
     
-    static func getGames(sport: String, completion: @escaping ([Event]) -> Void){
-        let urlString: String = "https://sofa-ios-academy-43194eec0621.herokuapp.com/events?sport=\(sport)"
+    static func getGames(sport: SportSlug, completion: @escaping ([Event]) -> Void){
+        let urlString: String = "https://sofa-ios-academy-43194eec0621.herokuapp.com/events?sport=\(sport.rawValue)"
         guard let url: URL = .init(string: urlString) else {
             completion([])
             return

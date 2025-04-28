@@ -2,7 +2,7 @@ import UIKit
 import SofaAcademic
 import SnapKit
 
-class NavigationViewController2: UIViewController {
+class NavigationViewController: UIViewController {
     
     private var stackView: UIStackView = .init()
     private var containerView: UIView = .init()
@@ -42,7 +42,7 @@ class NavigationViewController2: UIViewController {
                     self?.moveIndicator(to: button)
                 },
                 action: { [weak self] in
-                    self?.showViewController(FootballViewController3())
+                    self?.showViewController(FootballViewController())
                 }
             )
             
@@ -94,7 +94,7 @@ class NavigationViewController2: UIViewController {
     }
     
     private func showInitialViewController() {
-        let initialVC = FootballViewController3()
+        let initialVC = FootballViewController()
         showViewController(initialVC)
     }
     

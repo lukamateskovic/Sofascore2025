@@ -6,11 +6,12 @@ struct LeagueSection {
    let events: [Event]
 }
 
-class FootballViewController3: UIViewController {
+class FootballViewController: UIViewController {
     
     private let tableView = UITableView(frame: .zero, style: .plain)
     private var sortedLeagues: [LeagueSection] = []
     private let loadingIndicator = UIActivityIndicatorView(style: .large)
+    let matchDetailsVC = EventDetailsViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,18 +41,18 @@ class FootballViewController3: UIViewController {
     }
     
     private func loadData() {
-        APIClient.getGames(sport: "football") { [weak self] events in
+        APIClient.getGames(sport: .football) { [weak self] events in
             DispatchQueue.main.async {
-            self?.loadingIndicator.stopAnimating()
+                self?.loadingIndicator.stopAnimating()
                     
-            if events.isEmpty {
-                self?.showError("Nema dostupnih podataka")
-                return
-            }
+                if events.isEmpty {
+                    self?.showError("Nema dostupnih podataka")
+                    return
+                }
                         
-            self?.processEvents(events)
-            self?.tableView.reloadData()
-            self?.tableView.isHidden = false
+                self?.processEvents(events)
+                self?.tableView.reloadData()
+                self?.tableView.isHidden = false
             }
         }
     }
@@ -74,7 +75,7 @@ class FootballViewController3: UIViewController {
     }
 }
 
-extension FootballViewController3: UITableViewDataSource, UITableViewDelegate {
+extension FootballViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int { sortedLeagues.count }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -82,8 +83,19 @@ extension FootballViewController3: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: MatchViewCell.reuseIdentifier, for: indexPath) as! MatchViewCell
-        cell.configure(with: sortedLeagues[indexPath.section].events[indexPath.row])
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: MatchViewCell.reuseIdentifier,
+            for: indexPath
+        ) as? MatchViewCell else {
+            fatalError("Nepoznata ćelija")
+        }
+                
+        guard let leagueSection = sortedLeagues[safe: indexPath.section],
+            let event = leagueSection.events[safe: indexPath.row] else {
+            return cell
+        }
+                
+        cell.configure(with: event)
         return cell
     }
     
@@ -110,16 +122,15 @@ extension FootballViewController3: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
             tableView.deselectRow(at: indexPath, animated: true)
     
-                // Dohvaćamo event za odabranu ćeliju
-            let event = sortedLeagues[indexPath.section].events[indexPath.row]
-    
-                // Kreiramo i konfiguriramo MatchDetailsViewController
-            let matchDetailsVC = EventDetailsViewController()
-            matchDetailsVC.configure(with: event)
-    
-                // Otvaramo novi view controller
-            navigationController?.pushViewController(matchDetailsVC, animated: true)
+        guard let leagueSection = sortedLeagues[safe: indexPath.section],
+              let event = leagueSection.events[safe: indexPath.row] else {
+            return
         }
+    
+        matchDetailsVC.configure(with: event)
+
+        navigationController?.pushViewController(matchDetailsVC, animated: true)
+    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { 56 }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { 56 }

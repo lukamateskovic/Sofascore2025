@@ -1,9 +1,40 @@
 import UIKit
 import SnapKit
+import SofaAcademic
 
-class HeaderView: UIView {
+class HeaderView: BaseView {
+    
+    override func addViews() {
+        addSubview(logoImageView)
+        addSubview(settingsButton)
+    }
+    
+    override func styleViews() {
+        backgroundColor = .systemBlue
+    }
+    
+    override func setupConstraints() {
+        logoImageView.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(16)
+            $0.centerY.equalToSuperview()
+            $0.trailing.lessThanOrEqualTo(settingsButton.snp.leading).offset(-16)
+        }
+        
+        settingsButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().inset(16)
+            $0.centerY.equalToSuperview()
+        }
+    }
+    
+    override func setupGestureRecognizers() {
+        settingsButton.addTarget(self, action: #selector(settingsTapped), for: .touchUpInside)
+    }
+    
+    @objc private func settingsTapped() {
+        onSettingsTapped?()
+    }
+    
     var onSettingsTapped: (() -> Void)?
-    private let title: UILabel = .init()
     
     private let logoImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "sofascore_lockup"))
@@ -17,45 +48,4 @@ class HeaderView: UIView {
         button.tintColor = .white
         return button
     }()
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupViews()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupViews()
-    }
-    
-    private func setupViews() {
-        backgroundColor = .systemBlue
-        
-        
-        addSubview(logoImageView)
-        addSubview(settingsButton)
-        
-        
-        setupConstraints()
-        
-        settingsButton.addTarget(self, action: #selector(settingsTapped), for: .touchUpInside)
-    }
-    
-    private func setupConstraints(){
-        settingsButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview().inset(16)
-            $0.centerY.equalToSuperview()
-        }
-        
-        logoImageView.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(16)
-            $0.centerY.equalToSuperview()
-            $0.height.equalTo(32)
-            $0.width.lessThanOrEqualTo(160) // prilagodi po potrebi
-        }
-    }
-    
-    @objc private func settingsTapped() {
-        onSettingsTapped?()
-    }
 }

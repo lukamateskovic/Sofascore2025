@@ -23,11 +23,8 @@ class SettingsViewController: UIViewController {
     private func setupDismissButton() {
         view.addSubview(dismissButton)
         
-        dismissButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.centerY.equalToSuperview()
-            make.height.equalTo(44)
-            make.width.equalTo(120) 
+        dismissButton.snp.makeConstraints {
+            $0.center.equalToSuperview()
         }
     }
     
@@ -35,29 +32,3 @@ class SettingsViewController: UIViewController {
         dismiss(animated: true)
     }
 }
-
-
-
-//import UIKit
-//import SofaAcademic
-//import SnapKit
-//
-//class SettingsViewController: UIViewController {
-//    
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        view.backgroundColor = .white
-//        title = "Settings"
-//        
-//        navigationItem.leftBarButtonItem = UIBarButtonItem(
-//            title: "Dismiss",
-//            style: .plain,
-//            target: self,
-//            action: #selector(dismissTapped)
-//        )
-//    }
-//    
-//    @objc private func dismissTapped() {
-//        dismiss(animated: true)
-//    }
-//}
