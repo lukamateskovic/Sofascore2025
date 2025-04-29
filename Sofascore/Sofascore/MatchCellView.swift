@@ -52,13 +52,13 @@ extension MatchViewCell{
     private func configureTeamViews(event: Event, isHomeTeam: Bool) {
         let team = isHomeTeam ? event.homeTeam : event.awayTeam
         let color = EventHelper.getTeamColor(for: event, isHomeTeam: isHomeTeam)
-            
+        
         if isHomeTeam {
-            matchView.setHomeTeamImage(UIImage(named: team.name.lowercased()))
+            matchView.setHomeTeamImage(with: team.logoUrl)
             matchView.setHomeTeamLabel(team.name)
             matchView.setHomeTeamLabelColor(color)
         } else {
-            matchView.setAwayTeamImage(UIImage(named: team.name.lowercased()))
+            matchView.setAwayTeamImage(with: team.logoUrl)
             matchView.setAwayTeamLabel(team.name)
             matchView.setAwayTeamLabelColor(color)
         }

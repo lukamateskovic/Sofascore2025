@@ -2,6 +2,7 @@ import UIKit
 import SnapKit
 import SofaAcademic
 
+
 class LeagueViewCell: UITableViewCell, ReusableCell {
 
     private let leagueView = LeagueView()
