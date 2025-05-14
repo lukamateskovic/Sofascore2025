@@ -39,6 +39,8 @@ class AmericanFootballViewController: UIViewController {
         APIClient.getGames(sport: .americanFootball) { [weak self] events in
             DispatchQueue.main.async {
                 self?.loadingIndicator.stopAnimating()
+                
+                CoreDataService.shared.saveEvents(events)
                     
                 if events.isEmpty {
                     self?.showError("Nema dostupnih podataka")
