@@ -6,7 +6,7 @@ class CoreDataService {
     private let context: NSManagedObjectContext
     
     init() {
-        context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        context = CoreDataStack.shared.persistentContainer.viewContext
     }
     
     func saveEvents(_ events: [Event]) {
@@ -90,7 +90,6 @@ class CoreDataService {
     }
     
     private func update(_ existingEvent: EventEntity, with event: Event) {
-        // Ažuriraj atribute
         existingEvent.id = Int32(event.id)
         existingEvent.homeTeam = event.homeTeam.name
         existingEvent.awayTeam = event.awayTeam.name
@@ -99,7 +98,6 @@ class CoreDataService {
         existingEvent.homeScore = Int32(event.homeScore ?? -1)
         existingEvent.awayScore = Int32(event.awayScore ?? -1)
         
-        // Ažuriraj relaciju s ligom
         let league = getOrCreateLeague(from: event.league)
         existingEvent.league = league
     }

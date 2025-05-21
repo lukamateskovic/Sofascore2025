@@ -4,8 +4,12 @@ import SnapKit
 class AuthService {
     static let shared = AuthService()
     
-    private let authURL = URL(string: "https://sofa-ios-academy-43194eec0621.herokuapp.com/login")!
-    private let secureEventsURL = URL(string: "https://sofa-ios-academy-43194eec0621.herokuapp.com/secure/events")!
+    private var authURL: URL {
+        Helper.baseURL.appendingPathComponent(Helper.Endpoint.login.rawValue)
+    }
+    private var secureEventsURL: URL {
+        Helper.baseURL.appendingPathComponent(Helper.Endpoint.secureEvents.rawValue)
+    }
     
     var currentUser: User? {
         didSet {
@@ -54,6 +58,7 @@ class AuthService {
             }
         }.resume()
     }
+
     
     func logout() {
         CoreDataService.shared.deleteAllData()

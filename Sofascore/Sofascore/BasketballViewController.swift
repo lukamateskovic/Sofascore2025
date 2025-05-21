@@ -36,20 +36,26 @@ class BasketballViewController: UIViewController {
     }
     
     private func loadData() {
-        APIClient.getGames(sport: .basketball) { [weak self] events in
+        APIClient.getGames(sport: .basketball) { [weak self] result in
             DispatchQueue.main.async {
                 self?.loadingIndicator.stopAnimating()
                 
-                CoreDataService.shared.saveEvents(events)
-                    
-                if events.isEmpty {
-                    self?.showError("Nema dostupnih podataka")
-                    return
-                }
-                        
-                self?.processEvents(events)
-                self?.tableView.reloadData()
-                self?.tableView.isHidden = false
+                switch result {
+                    case .success(let events):
+                        CoreDataService.shared.saveEvents(events)
+                                
+                        if events.isEmpty {
+                            self?.showError("Nema dostupnih podataka")
+                            return
+                        }
+                                
+                        self?.processEvents(events)
+                        self?.tableView.reloadData()
+                        self?.tableView.isHidden = false
+                                
+                    case .failure(let error):
+                        self?.showError(error.localizedDescription)
+                    }
             }
         }
     }
