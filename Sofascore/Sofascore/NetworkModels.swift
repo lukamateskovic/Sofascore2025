@@ -41,3 +41,13 @@ enum Status: String, Decodable {
     case inProgress = "IN_PROGRESS"
     case notStarted = "NOT_STARTED"
 }
+
+public struct AuthResponse: Decodable {
+    let token: String
+    let name: String
+}
+
+public struct User: Decodable {
+    let name: String
+}
+

@@ -1,28 +1,27 @@
-
 import Foundation
 import Network
+import UIKit
 
-enum APIClient {
+enum APIClient{
     
-    static func getGames(sport: SportSlug, completion: @escaping ([Event]) -> Void){
-        let urlString: String = "https://sofa-ios-academy-43194eec0621.herokuapp.com/events?sport=\(sport.rawValue)"
-        guard let url: URL = .init(string: urlString) else {
-            completion([])
-            return
-        }
-        
-        var request: URLRequest = .init(url: url)
-        request.httpMethod = "GET"
-        
-        let task = URLSession.shared.dataTask(with: request) {
-            (data, response, error) in
-            if let data: Data,
-               let container = try? JSONDecoder().decode([Event].self, from: data) {
-                completion(container)
-            } else {
-                completion([])
-            }
-        }
-        task.resume()
+    static func getGames(sport: SportSlug, completion: @escaping (Result<[Event], Error>) -> Void) {
+        let queryItems = [URLQueryItem(name: "sport", value: sport.rawValue)]
+        Helper.performRequest(
+            endpoint: .events,
+            method: "GET",
+            queryItems: queryItems,
+            requiresAuth: false,
+            completion: completion
+        )
+    }
+    
+    static func fetchSecureEvents(completion: @escaping (Result<[Event], Error>) -> Void) {
+        Helper.performRequest(
+            endpoint: .secureEvents,
+            method: "GET",
+            requiresAuth: true,
+            completion: completion
+        )
     }
 }
+
