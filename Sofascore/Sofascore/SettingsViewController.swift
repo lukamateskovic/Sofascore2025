@@ -2,33 +2,36 @@ import UIKit
 import SnapKit
 
 class SettingsViewController: UIViewController {
+    private let settingsView = SettingsView()
     
-    private let dismissButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Dismiss", for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-        button.addTarget(self, action: #selector(dismissTapped), for: .touchUpInside)
-        return button
-    }()
+    override func loadView() {
+        self.view = settingsView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        
-        setupDismissButton()
-        
         title = "Settings"
+        setupActions()
+        updateContent()
     }
     
-    private func setupDismissButton() {
-        view.addSubview(dismissButton)
-        
-        dismissButton.snp.makeConstraints {
-            $0.center.equalToSuperview()
-        }
+    private func setupActions() {
+        settingsView.dismissButton.addTarget(self, action: #selector(dismissTapped), for: .touchUpInside)
+        settingsView.logoutButton.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
     }
     
     @objc private func dismissTapped() {
         dismiss(animated: true)
+    }
+    
+    @objc private func logoutTapped() {
+        AuthService.shared.logout()
+        dismiss(animated: true)
+    }
+    
+    private func updateContent() {
+        settingsView.nameLabel.text = AuthService.shared.currentUser?.name ?? "Unknown user"
+        settingsView.eventCountLabel.text = "Broj eventa: \(CoreDataService.shared.getEventCount())"
+        settingsView.leagueCountLabel.text = "Broj liga: \(CoreDataService.shared.getLeagueCount())"
     }
 }
