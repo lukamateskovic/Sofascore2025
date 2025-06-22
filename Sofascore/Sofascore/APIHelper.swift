@@ -3,11 +3,17 @@ import UIKit
 
 struct Helper{
     static let baseURL = URL(string: "https://sofa-ios-academy-43194eec0621.herokuapp.com")!
+    
         
     enum Endpoint: String {
         case events = "/events"
-        case secureEvents = "/secure/events"
         case login = "/login"
+        case incidents = "/events/%lld/incidents"
+        case league = "/leagues/%lld/standings"
+        case matches = "/leagues/%lld/matches"
+        case teams = "/teams/%lld"
+        case players = "/teams/%lld/players"
+        case tournaments = "/teams/%lld/tournaments"
     }
     static func performRequest<T: Decodable>(
         endpoint: Endpoint,

@@ -9,7 +9,6 @@ final class CoreDataStack {
     
 
     lazy var persistentContainer: NSPersistentContainer = {
-        // Ovdje stavi ime svog .xcdatamodeld fajla bez ekstenzije!
         let container = NSPersistentContainer(name: "SofascoreModel")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {

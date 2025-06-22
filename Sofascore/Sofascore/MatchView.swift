@@ -42,7 +42,6 @@ final class MatchView: BaseView {
         
         homeTeamLabel.font = .roboto(size: 14, weight: .medium)
         
-        
         awayTeamImageView.contentMode = .scaleAspectFit
         
         awayTeamLabel.font = .roboto(size: 14, weight: .medium)
@@ -133,17 +132,15 @@ extension MatchView {
     func setTimeLabelColor(_ color: UIColor) {
         timeLabel.textColor = color
     }
-    func setHomeTeamImage(with url: URL?) {
-        homeTeamImageView.image = nil
-        if let url = url {
-            homeTeamImageView.load(url: url)
-        }
+
+    func setHomeTeamImage(with logoUrl: String?) {
+        homeTeamImageView.image = nil 
+        homeTeamImageView.load(urlString: logoUrl)
     }
-    func setAwayTeamImage(with url: URL?) {
+
+    func setAwayTeamImage(with logoUrl: String?) {
         awayTeamImageView.image = nil
-        if let url = url {
-            awayTeamImageView.load(url: url)
-        }
+        awayTeamImageView.load(urlString: logoUrl)
     }
     func setHomeTeamLabel(_ text: String?) {
         homeTeamLabel.text = text

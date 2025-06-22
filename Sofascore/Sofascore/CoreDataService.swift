@@ -28,7 +28,7 @@ class CoreDataService {
         newEvent.id = Int32(event.id)
         newEvent.homeTeam = event.homeTeam.name
         newEvent.awayTeam = event.awayTeam.name
-        newEvent.startTimestamp = event.startTimestamp
+        newEvent.startTimestamp = Double(event.startTimestamp)
         newEvent.status = event.status.rawValue
         newEvent.homeScore = Int32(event.homeScore ?? -1)
         newEvent.awayScore = Int32(event.awayScore ?? -1)
@@ -48,7 +48,7 @@ class CoreDataService {
             newLeague.id = Int32(league.id)
             newLeague.name = league.name
             newLeague.country = league.country.name
-            newLeague.logoUrl = league.logoUrl?.absoluteString
+            newLeague.logoUrl = league.logoUrl
             return newLeague
         }
     }
@@ -93,7 +93,7 @@ class CoreDataService {
         existingEvent.id = Int32(event.id)
         existingEvent.homeTeam = event.homeTeam.name
         existingEvent.awayTeam = event.awayTeam.name
-        existingEvent.startTimestamp = event.startTimestamp
+        existingEvent.startTimestamp = Double(event.startTimestamp)
         existingEvent.status = event.status.rawValue
         existingEvent.homeScore = Int32(event.homeScore ?? -1)
         existingEvent.awayScore = Int32(event.awayScore ?? -1)
