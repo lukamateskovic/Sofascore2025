@@ -7,10 +7,7 @@ class AuthService {
     private var authURL: URL {
         Helper.baseURL.appendingPathComponent(Helper.Endpoint.login.rawValue)
     }
-    private var secureEventsURL: URL {
-        Helper.baseURL.appendingPathComponent(Helper.Endpoint.secureEvents.rawValue)
-    }
-    
+
     var currentUser: User? {
         didSet {
             NotificationCenter.default.post(name: .authStateChanged, object: nil)

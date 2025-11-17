@@ -4,11 +4,11 @@ import SofaAcademic
 
 final class SettingsView: BaseView {
 
-    let dismissButton = UIButton(type: .system)
-    let nameLabel = UILabel()
-    let logoutButton = UIButton(type: .system)
-    let eventCountLabel = UILabel()
-    let leagueCountLabel = UILabel()
+    let dismissButton: UIButton = .init(type: .system)
+    let nameLabel: UILabel = .init()
+    let logoutButton: UIButton = .init(type: .system)
+    let eventCountLabel: UILabel = .init()
+    let leagueCountLabel: UILabel = .init()
     
     private let countsStack = UIStackView()
     private let mainStack = UIStackView()

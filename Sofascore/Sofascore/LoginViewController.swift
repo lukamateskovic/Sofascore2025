@@ -3,11 +3,11 @@ import SnapKit
 
 class LoginViewController: UIViewController {
     
-    private let usernameField = UITextField()
-    private let passwordField = UITextField()
-    private let errorLabel = UILabel()
-    private let loginButton = UIButton(type: .system)
-    private let stackView = UIStackView()
+    private let usernameField: UITextField = .init()
+    private let passwordField: UITextField = .init()
+    private let errorLabel: UILabel = .init()
+    private let loginButton: UIButton = .init(type: .system)
+    private let stackView: UIStackView = .init()
     
     override func viewDidLoad() {
         super.viewDidLoad()

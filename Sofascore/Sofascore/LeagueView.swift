@@ -68,5 +68,8 @@ extension LeagueView {
     func setLeagueLabel(_ text: String?) {
         leagueLabel.text = text
     }
+    func getLogoImage() -> UIImage? {
+        return logoImageView.image
+    }
 }
 

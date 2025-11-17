@@ -7,8 +7,7 @@ class NavigationViewController: UIViewController {
     private var stackView: UIStackView = .init()
     private var containerView: UIView = .init()
     private var indicator: UIView = .init()
-    private var headerView = HeaderView()
-        
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -16,23 +15,19 @@ class NavigationViewController: UIViewController {
         setupConstraints()
         
         showInitialViewController()
-        setupNavigation()
-        
+        setupNavigationBar()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+            
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     private func createViews() {
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         view.addSubview(stackView)
-        
-        view.addSubview(headerView)
-                
-        headerView.onSettingsTapped = { [weak self] in
-            let settingsVC = SettingsViewController()
-            let navVC = UINavigationController(rootViewController: settingsVC)
-            navVC.modalPresentationStyle = .fullScreen
-            self?.present(navVC, animated: true)
-        }
             
         let footballButton = makeButton(
                 title: "Football",
@@ -42,7 +37,7 @@ class NavigationViewController: UIViewController {
                     self?.moveIndicator(to: button)
                 },
                 action: { [weak self] in
-                    self?.showViewController(FootballViewController())
+                    self?.showViewController(SportViewController(sport: .football))
                 }
             )
             
@@ -54,7 +49,7 @@ class NavigationViewController: UIViewController {
                     self?.moveIndicator(to: button)
                 },
                 action: { [weak self] in
-                    self?.showViewController(BasketballViewController())
+                    self?.showViewController(SportViewController(sport: .basketball))
                 }
             )
             
@@ -66,7 +61,7 @@ class NavigationViewController: UIViewController {
                     self?.moveIndicator(to: button)
                 },
                 action: { [weak self] in
-                    self?.showViewController(AmericanFootballViewController())
+                    self?.showViewController(SportViewController(sport: .americanFootball))
                 }
             )
             
@@ -83,9 +78,21 @@ class NavigationViewController: UIViewController {
         
     }
     
-    private func setupNavigation() {
-        title = "Main"
-        
+    private func setupNavigationBar() {
+        let headerView = HeaderView()
+        headerView.onSettingsTapped = { [weak self] in
+            let settingsVC = SettingsViewController()
+            let navVC = UINavigationController(rootViewController: settingsVC)
+            navVC.modalPresentationStyle = .fullScreen
+            self?.present(navVC, animated: true)
+        }
+                
+        navigationItem.titleView = headerView
+                
+        headerView.snp.makeConstraints {
+            $0.height.equalTo(44)
+        }
+                
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .systemBlue
@@ -94,19 +101,14 @@ class NavigationViewController: UIViewController {
     }
     
     private func showInitialViewController() {
-        let initialVC = FootballViewController()
+        let initialVC = SportViewController(sport: .football)
         showViewController(initialVC)
     }
     
     private func setupConstraints() {
-        headerView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(44)
-        }
         
         stackView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
         }
         

@@ -9,6 +9,8 @@ final class EventDetailsView: BaseView {
     private let awayTeamImageView: UIImageView = .init()
     private let awayTeamLabel: UILabel = .init()
     
+    private var event: Event?
+
     private let homeScoreLabel: UILabel = .init()
     private let scoreSeparatorLabel: UILabel = .init()
     private let awayScoreLabel: UILabel = .init()
@@ -16,6 +18,8 @@ final class EventDetailsView: BaseView {
     private let statusLabel: UILabel = .init()
     private let dateLabel: UILabel = .init()
     private let timeLabel: UILabel = .init()
+    
+    var onTeamTap: ((Team) -> Void)?
     
     override func addViews() {
 
@@ -37,7 +41,16 @@ final class EventDetailsView: BaseView {
         backgroundColor = .white
         
         homeTeamImageView.contentMode = .scaleAspectFit
+        
+        homeTeamImageView.isUserInteractionEnabled = true
+        let homeTap = UITapGestureRecognizer(target: self, action: #selector(handleHomeTeamTap))
+        homeTeamImageView.addGestureRecognizer(homeTap)
+        
         awayTeamImageView.contentMode = .scaleAspectFit
+        
+        awayTeamImageView.isUserInteractionEnabled = true
+        let awayTap = UITapGestureRecognizer(target: self, action: #selector(handleAwayTeamTap))
+        awayTeamImageView.addGestureRecognizer(awayTap)
         
         homeTeamLabel.font = .roboto(size: 12, weight: .bold)
         homeTeamLabel.textAlignment = .center
@@ -136,11 +149,13 @@ final class EventDetailsView: BaseView {
     }
     
     func configure(with event: Event) {
+        
+        self.event = event
 
-        setHomeTeamImage(UIImage(named: event.homeTeam.name.lowercased()))
+        setHomeTeamImage(event.homeTeam.logoUrl)
         setHomeTeamLabel(event.homeTeam.name)
         
-        setAwayTeamImage(UIImage(named: event.awayTeam.name.lowercased()))
+        setAwayTeamImage(event.awayTeam.logoUrl)
         setAwayTeamLabel(event.awayTeam.name)
         
         switch event.status {
@@ -151,6 +166,16 @@ final class EventDetailsView: BaseView {
         default:
             configureForFinishedMatch(event)
         }
+    }
+    
+    @objc private func handleHomeTeamTap() {
+        guard let homeTeam = event?.homeTeam else { return }
+        onTeamTap?(homeTeam)
+    }
+    
+    @objc private func handleAwayTeamTap() {
+        guard let awayTeam = event?.awayTeam else { return }
+        onTeamTap?(awayTeam)
     }
     
     private func configureForUpcomingMatch(_ event: Event) {
@@ -226,16 +251,16 @@ final class EventDetailsView: BaseView {
 }
 
 extension EventDetailsView {
-    func setHomeTeamImage(_ image: UIImage?) {
-        homeTeamImageView.image = image
+    func setHomeTeamImage(_ urlString: String?) {
+        homeTeamImageView.load(urlString: urlString)
     }
     
     func setHomeTeamLabel(_ text: String?) {
         homeTeamLabel.text = text
     }
     
-    func setAwayTeamImage(_ image: UIImage?) {
-        awayTeamImageView.image = image
+    func setAwayTeamImage(_ urlString: String?) {
+        awayTeamImageView.load(urlString: urlString)
     }
     
     func setAwayTeamLabel(_ text: String?) {
